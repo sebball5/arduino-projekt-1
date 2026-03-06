@@ -69,3 +69,9 @@ og støj, temperatur, lufttryk og fugt
 # Logger pro era.
 
 nu vi gerne skrive et kort program i arduino, og vise dataen i logger pro 
+
+starter med at prøve at måle gas med VOC and eCO2 Gas Sensor (SGP30) v1.1 og vise dataen i loggerpro
+
+vi brugt claude her er claudes forklaring forfines senere men lige nu skal python virker og det er vigtigter 
+
+Vi har sat en SGP30 gassensor op på vores Arduino Uno, som måler luftkvalitet i form af eCO2 (kuldioxid) og TVOC (flygtige organiske forbindelser) i klasseværelset. Sensoren er tilsluttet via I2C på pin D4 og D5. For at få dataen ind i vores computer har vi skrevet et Python-script, der automatisk læser målingerne fra Arduino og gemmer dem direkte i en Excel-fil med grafer, så vi kan følge med i luftkvaliteten over tid. Scriptet starter automatisk med et enkelt dobbeltklik og kræver ingen manuel indgriben undervejs.
