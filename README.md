@@ -40,3 +40,18 @@ sidder man ordenligt
 
 flappy bird ud fra lyd/lys eller luft kval.
 
+# Lyskrydsmetoden til ovenstående ideer.
+
+Første ide, black box over alt i klasse ![](https://img.shields.io/badge/GOD-grøn-green)
+
+Anden ide, stort set første ide ![](https://img.shields.io/badge/GOD-grøn-green)
+
+tjerde ide, vande newton (andre går med den ide) ![](https://img.shields.io/badge/GOD-grøn-green)
+
+fjerde ide, en bil der kører rundt i klassen![](https://img.shields.io/badge/MODERAT-gul-yellow)
+
+femte ide, ligesom bilen men virker som støvsuger, altså en roomba ![](https://img.shields.io/badge/MODERAT-gul-yellow)
+
+syvende ide, hvorvidt man sidder ordenligt på en stol og om man sidder for lang tid på den ![](https://img.shields.io/badge/DÅRLIG-rød-red)
+
+ottoende ide, flappy bird ud fra en sensor ![](https://img.shields.io/badge/DÅRLIG-rød-red)
