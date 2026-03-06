@@ -65,3 +65,7 @@ sensorne vi gerne vil bruge, vi vil gerne måle luftkval og gasser (eventuelt me
 så luftkval, gasser og menneske radar
 
 og støj, temperatur, lufttryk og fugt
+
+# Logger pro era.
+
+nu vi gerne skrive et kort program i arduino, og vise dataen i logger pro 
