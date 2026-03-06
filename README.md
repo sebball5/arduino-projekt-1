@@ -40,7 +40,7 @@ sidder man ordenligt
 
 flappy bird ud fra lyd/lys eller luft kval.
 
-# Lyskrydsmetoden til ovenstående ideer.
+# Lyskrydsmetoden til ovenstående ideer. 06-03-2026
 
 Første ide, black box over alt i klasse ![](https://img.shields.io/badge/GOD-grøn-green)
 
@@ -55,3 +55,13 @@ femte ide, ligesom bilen men virker som støvsuger, altså en roomba ![](https:/
 syvende ide, hvorvidt man sidder ordenligt på en stol og om man sidder for lang tid på den ![](https://img.shields.io/badge/DÅRLIG-rød-red)
 
 ottoende ide, flappy bird ud fra en sensor ![](https://img.shields.io/badge/DÅRLIG-rød-red)
+
+# ideen valgt 06-03-2026
+
+vi har valgt at køre med den første/anden ide, nu skal vi så finde ud af hvad vi skal bruge.
+
+sensorne vi gerne vil bruge, vi vil gerne måle luftkval og gasser (eventuelt menneske sensor i døren som tæller hver gang man går ind eller ud) , hvordan de påvirker så meget andet. det andet er støj, temperatur lufttryk, fugt 
+
+så luftkval, gasser og menneske radar
+
+og støj, temperatur, lufttryk og fugt
