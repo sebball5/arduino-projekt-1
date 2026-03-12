@@ -66,7 +66,7 @@ så luftkval, gasser og menneske radar
 
 og støj, temperatur, lufttryk og fugt
 
-# Logger pro era.
+# Logger pro era. 06-03-2026
 
 Nu vi gerne skrive et kort program i arduino, og vise dataen i logger pro 
 
@@ -76,6 +76,13 @@ Vi brugte Claude, her er Claudes forklaring (forfines senere men lige nu skal py
 
 Vi har sat en SGP30 gassensor op på vores Arduino Uno, som måler luftkvalitet i form af eCO2 (kuldioxid) og TVOC (flygtige organiske forbindelser) i klasseværelset. Sensoren er tilsluttet via I2C på pin D4 og D5. For at få dataen ind i vores computer har vi skrevet et Python-script, der automatisk læser målingerne fra Arduino og gemmer dem direkte i en Excel-fil med grafer, så vi kan følge med i luftkvaliteten over tid. Scriptet starter automatisk med et enkelt dobbeltklik og kræver ingen manuel indgriben undervejs.
 
-# Problemformulering
+# Problemformulering (12-03-2026)
 
 I vores klasseværelse er der ofte tung luft, meget støj og en kvælende temperatur. Dette forringer vores læringsevne ret markant, da det er svært at koncentrere sig og holde fokus når omgivelserne er dårlige. Vi vil derfor gerne undersøge luftkvaliteten, lydniveauet, temperaturen og mængden af fugt ved hjælp af en Arduino. Vi vil gerne undersøge sammenhængen mellem de forskellige faktorer, om der er forskel i pauserne vs. timerne (og dermed om faktorerne påvirkes markant af ændringer i lokalet som fx. mængden af mennesket og om vinduet er åbent) og om vi eventuelt kommer over nogle grænseværdier, som vi derefter kan forbedre enten selv eller ved at få lavet markante ændringer i klasselokalet.
+
+# flowchart (12-03-2026)
+https://miro.com/welcomeonboard/MHlqSzBMOTVPWXNoTlNaUFZjUjZzQ0VDeG5VWFA1b2R2UDF1SW1yS3JMaGE4M25BcWZmSGE5Q0xIcFp1WitxdGIvb1VlblY4WlVMWlZtclFnN1l4NTZSTVhMdVhWaGxTMnhZSjNDWkFFa09QRmE1ZmdBVElQZWhsT3hwMlgzbnNNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=627217930046
+Miro
+Miro | The Visual Workspace for Innovation
+Miro is a visual workspace for innovation where teams manage projects, design products, and build the future together. Join 60M+ users from around the world.
+Billede 
