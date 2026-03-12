@@ -75,3 +75,7 @@ starter med at prøve at måle gas med VOC and eCO2 Gas Sensor (SGP30) v1.1 og v
 Vi brugte Claude, her er Claudes forklaring (forfines senere men lige nu skal python virke og det er vigtigere):
 
 Vi har sat en SGP30 gassensor op på vores Arduino Uno, som måler luftkvalitet i form af eCO2 (kuldioxid) og TVOC (flygtige organiske forbindelser) i klasseværelset. Sensoren er tilsluttet via I2C på pin D4 og D5. For at få dataen ind i vores computer har vi skrevet et Python-script, der automatisk læser målingerne fra Arduino og gemmer dem direkte i en Excel-fil med grafer, så vi kan følge med i luftkvaliteten over tid. Scriptet starter automatisk med et enkelt dobbeltklik og kræver ingen manuel indgriben undervejs.
+
+# Problemformulering
+
+I vores klasseværelse er der ofte tung luft, meget støj og en kvælende temperatur. Dette forringer vores læringsevne ret markant, da det er svært at koncentrere sig og holde fokus når omgivelserne er dårlige. Vi vil derfor gerne undersøge luftkvaliteten, lydniveauet, temperaturen og mængden af fugt ved hjælp af en Arduino. Vi vil gerne undersøge sammenhængen mellem de forskellige faktorer, om der er forskel i pauserne vs. timerne (og dermed om faktorerne påvirkes markant af ændringer i lokalet som fx. mængden af mennesket og om vinduet er åbent) og om vi eventuelt kommer over nogle grænseværdier, som vi derefter kan forbedre enten selv eller ved at få lavet markante ændringer i klasselokalet.
