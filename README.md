@@ -66,6 +66,25 @@ så luftkval, gasser og menneske radar
 
 og støj, temperatur, lufttryk og fugt
 
+# Det vi har lånt
+
+- En Arduino med overdel
+
+- Ledning så den kan gå i computeren
+
+- VOC and eCO2 Sensor (SGP30) v1.1
+
+- Grove-LCD RGB Backlight V4.0
+
+- Sound Sensor v1.6
+
+- Temperature&Humidity Sensor Pro v1.3
+
+- MicroPressureSensor
+
+- En lilla dimmelut Mark gav os
+
+
 # Logger pro era. 06-03-2026
 
 Nu vi gerne skrive et kort program i arduino, og vise dataen i logger pro 
