@@ -2,7 +2,170 @@
 Første arduino projekt 
 af August, Emilie og Sebastian
 
-# Brainstorm 06-03-2026
+# Problemformulering 
+I vores klasseværelse er der ofte tung luft, meget støj og en kvælende temperatur. Dette forringer vores læringsevne ret markant, da det er svært at koncentrere sig og holde fokus når omgivelserne er dårlige. Vi vil derfor gerne undersøge luftkvaliteten, lydniveauet, temperaturen og mængden af fugt ved hjælp af en Arduino. Vi vil gerne undersøge sammenhængen mellem de forskellige faktorer, om der er forskel i pauserne vs. timerne (og dermed om faktorerne påvirkes markant af ændringer i lokalet som fx. mængden af mennesket og om vinduet er åbent) og om vi eventuelt kommer over nogle grænseværdier, som vi derefter kan forbedre enten selv eller ved at få lavet markante ændringer i klasselokalet.
+
+# Flowchart 
+Link til flowchart lavet i Miro ↓
+
+https://miro.com/welcomeonboard/MHlqSzBMOTVPWXNoTlNaUFZjUjZzQ0VDeG5VWFA1b2R2UDF1SW1yS3JMaGE4M25BcWZmSGE5Q0xIcFp1WitxdGIvb1VlblY4WlVMWlZtclFnN1l4NTZSTVhMdVhWaGxTMnhZSjNDWkFFa09QRmE1ZmdBVElQZWhsT3hwMlgzbnNNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=627217930046 
+
+# Kode
+Arduino 
+```cpp
+//luft kval måler
+#define SDA_PORT PORTD
+#define SDA_PIN 2
+#define SCL_PORT PORTD
+#define SCL_PIN 3
+#define I2C_SLOWMODE 1
+
+#include <SoftI2CMaster.h>
+#include <Wire.h>
+#include "Adafruit_SGP30.h"
+
+Adafruit_SGP30 sgp;
+unsigned long startTid;
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial) { delay(10); }
+
+  i2c_init();
+
+  if (!sgp.begin()) {
+    Serial.println("FEJL: SGP30 ikke fundet! Tjek D2/D3 tilslutning.");
+    while (1);
+  }
+
+  startTid = millis();
+  Serial.println("Tid_sek,eCO2_ppm,TVOC_ppb,Status_nr,Status_tekst,dB,C°,RL");
+}
+
+void loop() {
+  if (!sgp.IAQmeasure()) {
+    delay(1000);
+    return;
+  }
+
+  float tid = (millis() - startTid) / 1000.0;
+  int eco2 = sgp.eCO2;
+  int tvoc = sgp.TVOC;
+
+  int statusNr;
+  String statusTekst;
+
+  if (eco2 < 800) {
+    statusNr = 1; statusTekst = "God";
+  } else if (eco2 < 1500) {
+    statusNr = 2; statusTekst = "Moderat";
+  } else {
+    statusNr = 3; statusTekst = "Darlig";
+  }
+int dB=1;
+int Temp=1;
+int RL=1;
+  Serial.print(tid, 1);   Serial.print(",");
+  Serial.print(eco2);     Serial.print(",");
+  Serial.print(tvoc);     Serial.print(",");
+  Serial.print(statusNr); Serial.print(",");
+  Serial.print(statusTekst); Serial.print(",");
+  Serial.print(dB); Serial.print(",");
+  Serial.print(Temp); Serial.print(",");
+  Serial.println(RL); 
+  delay(1000);
+}
+```
+Python 
+```Py
+import serial
+import time
+import os
+from datetime import datetime
+from openpyxl import load_workbook
+
+COM_PORT  = "COM6"
+BAUD_RATE = 9600
+EXCEL_FIL = "SGP30_Data.xlsx"
+GEM_HVERT = 10
+
+def main():
+    print("SGP30 -> Excel Logger")
+
+    if not os.path.exists(EXCEL_FIL):
+        print(f"Kunne ikke finde '{EXCEL_FIL}'")
+        input("Tryk Enter...")
+        return
+
+    print(f"Forbinder til {COM_PORT}...")
+    try:
+        ser = serial.Serial(COM_PORT, BAUD_RATE, timeout=2)
+        time.sleep(2)
+        print("Forbundet! Koerer... tryk Ctrl+C for at stoppe\n")
+    except serial.SerialException:
+        print(f"Kunne ikke forbinde til {COM_PORT}")
+        input("Tryk Enter...")
+        return
+
+    wb = load_workbook(EXCEL_FIL)
+    ws = wb["Data"]
+
+    naeste_gem = time.time() + GEM_HVERT
+    naeste_row = 2
+
+    try:
+        while True:
+            line = ser.readline().decode("utf-8", errors="ignore").strip()
+            if not line or "Tidspunkt" in line or "FEJL" in line:
+                continue
+
+            parts = line.split(",")
+            if len(parts) < 8:
+                continue
+
+            try:
+                eco2      = int(parts[1])
+                tvoc      = int(parts[2])
+                status_nr = int(parts[3])
+                status    = parts[4].strip()
+                dB        = int(parts[5])
+                temp      = int(parts[6])
+                RL        = parts[7].strip()
+            except ValueError:
+                continue
+
+            tidspunkt = datetime.now().strftime("%H:%M:%S")
+
+            ws.cell(row=naeste_row, column=1, value=tidspunkt)
+            ws.cell(row=naeste_row, column=2, value=eco2)
+            ws.cell(row=naeste_row, column=3, value=tvoc)
+            ws.cell(row=naeste_row, column=4, value=status_nr)
+            ws.cell(row=naeste_row, column=5, value=status)
+            ws.cell(row=naeste_row, column=6, value=dB)
+            ws.cell(row=naeste_row, column=7, value=temp)
+            ws.cell(row=naeste_row, column=8, value=RL)
+            naeste_row += 1
+
+            print(f"  {tidspunkt} | eCO2: {eco2:>5} ppm | TVOC: {tvoc:>4} ppb | dB: {dB:>4} | Temp: {temp:>3}C | {status}")
+
+            if time.time() >= naeste_gem:
+                wb.save(EXCEL_FIL)
+                print(f"  [GEMT] {datetime.now().strftime('%H:%M:%S')}")
+                naeste_gem = time.time() + GEM_HVERT
+
+    except KeyboardInterrupt:
+        print("\nStopper...")
+    finally:
+        wb.save(EXCEL_FIL)
+        ser.close()
+        print("Faerdig! Aaben SGP30_Data.xlsx og tjek Data fanen.")
+        input("Tryk Enter...")
+
+if __name__ == "__main__":
+    main()
+```
+# Logbog for emnet
+## Brainstorm 06-03-2026
 
 Typer af sensorere vi kan bruge: afstand, infrarød, motion sensor, fugt, temperatur, luft kvalitet, gas, menneske radar, touch, vibration/kollision/bevægelse, støv, afstand, ultralyd, vægt, magnet, fugt, encoders, lyd, kraft, puls  
 
@@ -40,7 +203,7 @@ Sidder man ordenligt-sensor
 
 Flappy bird ud fra lyd/lys eller luft kvalitet.
 
-# Lyskrydsmetoden til ovenstående ideer. 06-03-2026
+## Lyskrydsmetoden til ovenstående ideer. 06-03-2026
 
 Første ide, black box over alt i klasse ![](https://img.shields.io/badge/GOD-grøn-green)
 
@@ -56,7 +219,7 @@ Syvende ide, hvorvidt man sidder ordenligt på en stol og om man sidder for lang
 
 Ottende ide, flappy bird ud fra en sensor ![](https://img.shields.io/badge/DÅRLIG-rød-red)
 
-# Ideen valgt 06-03-2026
+## Ideen valgt 06-03-2026
 
 Vi har valgt at køre med den første/anden ide, nu skal vi så finde ud af hvad vi skal bruge.
 
@@ -85,7 +248,7 @@ og støj, temperatur, lufttryk og fugt
 - En lilla dimmelut Mark gav os
 
 
-# Logger pro era. 06-03-2026
+## Logger pro. 06-03-2026
 
 Nu vi gerne skrive et kort program i arduino, og vise dataen i logger pro 
 
@@ -95,11 +258,11 @@ Vi brugte Claude, her er Claudes forklaring (forfines senere men lige nu skal py
 
 Vi har sat en SGP30 gassensor op på vores Arduino Uno, som måler luftkvalitet i form af eCO2 (kuldioxid) og TVOC (flygtige organiske forbindelser) i klasseværelset. Sensoren er tilsluttet via I2C på pin D4 og D5. For at få dataen ind i vores computer har vi skrevet et Python-script, der automatisk læser målingerne fra Arduino og gemmer dem direkte i en Excel-fil med grafer, så vi kan følge med i luftkvaliteten over tid. Scriptet starter automatisk med et enkelt dobbeltklik og kræver ingen manuel indgriben undervejs.
 
-# Problemformulering (12-03-2026)
+## Problemformulering (12-03-2026)
 
 I vores klasseværelse er der ofte tung luft, meget støj og en kvælende temperatur. Dette forringer vores læringsevne ret markant, da det er svært at koncentrere sig og holde fokus når omgivelserne er dårlige. Vi vil derfor gerne undersøge luftkvaliteten, lydniveauet, temperaturen og mængden af fugt ved hjælp af en Arduino. Vi vil gerne undersøge sammenhængen mellem de forskellige faktorer, om der er forskel i pauserne vs. timerne (og dermed om faktorerne påvirkes markant af ændringer i lokalet som fx. mængden af mennesket og om vinduet er åbent) og om vi eventuelt kommer over nogle grænseværdier, som vi derefter kan forbedre enten selv eller ved at få lavet markante ændringer i klasselokalet.
 
-# flowchart (12-03-2026)
+## flowchart (12-03-2026)
 https://miro.com/welcomeonboard/MHlqSzBMOTVPWXNoTlNaUFZjUjZzQ0VDeG5VWFA1b2R2UDF1SW1yS3JMaGE4M25BcWZmSGE5Q0xIcFp1WitxdGIvb1VlblY4WlVMWlZtclFnN1l4NTZSTVhMdVhWaGxTMnhZSjNDWkFFa09QRmE1ZmdBVElQZWhsT3hwMlgzbnNNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=627217930046
 Miro
 Miro | The Visual Workspace for Innovation
