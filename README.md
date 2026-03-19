@@ -19,16 +19,21 @@ Arduino
 #define SCL_PORT PORTD
 #define SCL_PIN 3
 #define I2C_SLOWMODE 1
+#define DHTPIN 4
+#define DHTTYPE DHT22
 
 #include <SoftI2CMaster.h>
 #include <Wire.h>
 #include "Adafruit_SGP30.h"
+#include "DHT.h"
 
 Adafruit_SGP30 sgp;
 unsigned long startTid;
+DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
   Serial.begin(9600);
+  dht.begin();
   while (!Serial) { delay(10); }
 
   i2c_init();
@@ -49,6 +54,16 @@ void loop() {
   }
 
   float tid = (millis() - startTid) / 1000.0;
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  // Tjek om DHT-aflæsning lykkedes
+  if (isnan(h) || isnan(t)) {
+    Serial.println("FEJL: Kunne ikke læse fra DHT-sensor!");
+    delay(1000);
+    return;
+  }
+
   int eco2 = sgp.eCO2;
   int tvoc = sgp.TVOC;
 
@@ -62,38 +77,41 @@ void loop() {
   } else {
     statusNr = 3; statusTekst = "Darlig";
   }
-int dB=1;
-int Temp=1;
-int RL=1;
-  Serial.print(tid, 1);   Serial.print(",");
-  Serial.print(eco2);     Serial.print(",");
-  Serial.print(tvoc);     Serial.print(",");
-  Serial.print(statusNr); Serial.print(",");
-  Serial.print(statusTekst); Serial.print(",");
-  Serial.print(dB); Serial.print(",");
-  Serial.print(Temp); Serial.print(",");
-  Serial.println(RL); 
+
+  int dB = 1; // stadig placeholder
+
+  Serial.print(tid, 1);       Serial.print(",");
+  Serial.print(eco2);         Serial.print(",");
+  Serial.print(tvoc);         Serial.print(",");
+  Serial.print(statusNr);     Serial.print(",");
+  Serial.print(statusTekst);  Serial.print(",");
+  Serial.print(dB);           Serial.print(",");
+  Serial.print(t, 1);         Serial.print(",");  // <-- rigtig temperatur
+  Serial.println(h, 1);                           // <-- rigtig luftfugtighed
+
   delay(1000);
-}
-```
+}```
 Python 
 ```Py
 import serial
 import time
-import os
+import os, sys
 from datetime import datetime
 from openpyxl import load_workbook
 
-COM_PORT  = "COM6"
+COM_PORT  = "COM4"
 BAUD_RATE = 9600
+pathname = os.path.abspath(os.path.dirname(sys.argv[0]))
 EXCEL_FIL = "SGP30_Data.xlsx"
+EXCEL_FULL_PATH = os.path.join(pathname,EXCEL_FIL)
 GEM_HVERT = 10
 
 def main():
     print("SGP30 -> Excel Logger")
 
-    if not os.path.exists(EXCEL_FIL):
-        print(f"Kunne ikke finde '{EXCEL_FIL}'")
+    print(f"Åbner: {EXCEL_FULL_PATH}")
+    if not os.path.exists(EXCEL_FULL_PATH):
+        print(f"Kunne ikke finde '{EXCEL_FULL_PATH}'")
         input("Tryk Enter...")
         return
 
@@ -107,7 +125,7 @@ def main():
         input("Tryk Enter...")
         return
 
-    wb = load_workbook(EXCEL_FIL)
+    wb = load_workbook(EXCEL_FULL_PATH)
     ws = wb["Data"]
 
     naeste_gem = time.time() + GEM_HVERT
@@ -115,10 +133,10 @@ def main():
 
     try:
         while True:
-            line = ser.readline().decode("utf-8", errors="ignore").strip()
+            line = ser.readline().decode("utf-8", errors="ignore").strip()	
+            print(f"DEBUG: '{line}'")
             if not line or "Tidspunkt" in line or "FEJL" in line:
                 continue
-
             parts = line.split(",")
             if len(parts) < 8:
                 continue
@@ -129,8 +147,8 @@ def main():
                 status_nr = int(parts[3])
                 status    = parts[4].strip()
                 dB        = int(parts[5])
-                temp      = int(parts[6])
-                RL        = parts[7].strip()
+                temp      = float(parts[6])
+                humidity  = float(parts[7])
             except ValueError:
                 continue
 
@@ -143,27 +161,26 @@ def main():
             ws.cell(row=naeste_row, column=5, value=status)
             ws.cell(row=naeste_row, column=6, value=dB)
             ws.cell(row=naeste_row, column=7, value=temp)
-            ws.cell(row=naeste_row, column=8, value=RL)
+            ws.cell(row=naeste_row, column=8, value=humidity)
             naeste_row += 1
 
-            print(f"  {tidspunkt} | eCO2: {eco2:>5} ppm | TVOC: {tvoc:>4} ppb | dB: {dB:>4} | Temp: {temp:>3}C | {status}")
+            print(f"  {tidspunkt} | eCO2: {eco2:>5} ppm | TVOC: {tvoc:>4} ppb | dB: {dB:>4} | Temp: {temp:>3}C | Fugt: {humidity:>5.1f}% | {status}")
 
             if time.time() >= naeste_gem:
-                wb.save(EXCEL_FIL)
+                wb.save(EXCEL_FULL_PATH)
                 print(f"  [GEMT] {datetime.now().strftime('%H:%M:%S')}")
                 naeste_gem = time.time() + GEM_HVERT
 
     except KeyboardInterrupt:
         print("\nStopper...")
     finally:
-        wb.save(EXCEL_FIL)
+        wb.save(EXCEL_FULL_PATH)
         ser.close()
         print("Faerdig! Aaben SGP30_Data.xlsx og tjek Data fanen.")
         input("Tryk Enter...")
 
 if __name__ == "__main__":
-    main()
-```
+    main()```
 # Logbog for emnet
 ## Brainstorm 06-03-2026
 
