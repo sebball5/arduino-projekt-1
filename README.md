@@ -285,3 +285,92 @@ Miro
 Miro | The Visual Workspace for Innovation
 Miro is a visual workspace for innovation where teams manage projects, design products, and build the future together. Join 60M+ users from around the world.
 Billede 
+
+
+kode for i dag (23/3)
+#define SDA_PORT PORTD
+#define SDA_PIN 2
+#define SCL_PORT PORTD
+#define SCL_PIN 3
+#define I2C_SLOWMODE 1
+#define DHTPIN 4
+#define DHTTYPE DHT22
+#define lydpin A0
+
+#include <SoftI2CMaster.h>
+#include <Wire.h>
+#include "Adafruit_SGP30.h"
+#include "DHT.h"
+
+Adafruit_SGP30 sgp;
+unsigned long startTid;
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  while (!Serial) { delay(10); }
+
+  i2c_init();
+
+  if (!sgp.begin()) {
+    Serial.println("FEJL: SGP30 ikke fundet! Tjek D2/D3 tilslutning.");
+    while (1);
+  }
+
+  startTid = millis();
+  Serial.println("Tid_sek,eCO2_ppm,TVOC_ppb,Status_nr,Status_tekst,dB,C°,RL");
+}
+
+void loop() {
+  if (!sgp.IAQmeasure()) {
+    delay(1000);
+    return;
+  }
+
+  float tid = (millis() - startTid) / 1000.0;
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  // Tjek om DHT-aflæsning lykkedes
+  if (isnan(h) || isnan(t)) {
+    Serial.println("FEJL: Kunne ikke læse fra DHT-sensor!");
+    delay(1000);
+    return;
+  }
+
+  int eco2 = sgp.eCO2;
+  int tvoc = sgp.TVOC;
+  int statusNr;
+  int dB = analogRead(lydpin);
+
+//long sum = 0;
+//for(int i=0; i<32; i++)
+//{
+//    sum += analogRead(lydpin);
+//}
+//sum = sum / 32;
+
+  String statusTekst;
+
+  if (eco2 < 800) {
+    statusNr = 1; statusTekst = "God";
+  } else if (eco2 < 1500) {
+    statusNr = 2; statusTekst = "Moderat";
+  } else {
+    statusNr = 3; statusTekst = "Darlig";
+  }
+
+
+  Serial.print(tid, 1);       Serial.print(",");
+  Serial.print(eco2);         Serial.print(",");
+  Serial.print(tvoc);         Serial.print(",");
+  Serial.print(statusNr);     Serial.print(",");
+  Serial.print(statusTekst);  Serial.print(",");
+  Serial.print(dB);           Serial.print(",");
+  Serial.print(t, 1);         Serial.print(",");  
+  Serial.println(h, 1);                           
+
+  delay(1000);
+}
+
