@@ -287,7 +287,8 @@ Miro is a visual workspace for innovation where teams manage projects, design pr
 Billede 
 
 
-kode for i dag (23/3)
+kode for i dag (23/3):
+
 #define SDA_PORT PORTD
 #define SDA_PIN 2
 #define SCL_PORT PORTD
@@ -373,4 +374,8 @@ void loop() {
 
   delay(1000);
 }
+
+Udover ovenstående er vi nået langt. Gangen før var Sebastian fraværende, så vi brugte lang tid på at få downloadet de nødvendige programmer og udvidelser på Emilies computer. I dag har August og Emilie brugt tid på at tilslutte en lyd-sensor, rette i koden og forsøge at kalibre den, sådan at vi får værdierne i dB (pt giver den bare rå ACD data, som er en måling af elektriske impulser). Derudover har vi i fællesskab fået Excel til at fungere sådan, at vi kan se den opdatere live i stedet for at crashe programmet hver gang den starter op.
+
+
 
