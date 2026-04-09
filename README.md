@@ -11,7 +11,7 @@ Link til flowchart lavet i Miro ↓
 https://miro.com/welcomeonboard/MHlqSzBMOTVPWXNoTlNaUFZjUjZzQ0VDeG5VWFA1b2R2UDF1SW1yS3JMaGE4M25BcWZmSGE5Q0xIcFp1WitxdGIvb1VlblY4WlVMWlZtclFnN1l4NTZSTVhMdVhWaGxTMnhZSjNDWkFFa09QRmE1ZmdBVElQZWhsT3hwMlgzbnNNakdSWkpBejJWRjJhRnhhb1UwcS9BPT0hdjE=?share_link_id=627217930046 
 
 # Kode
-Arduino 
+## Arduino 
 ```cpp
 //luft kval måler
 #define SDA_PORT PORTD
@@ -90,9 +90,10 @@ void loop() {
   Serial.println(h, 1);                           // <-- rigtig luftfugtighed
 
   delay(1000);
-}```
-Python 
-```Py
+}
+```
+## Python 
+```py
 import serial
 import time
 import os, sys
@@ -180,7 +181,8 @@ def main():
         input("Tryk Enter...")
 
 if __name__ == "__main__":
-    main()```
+    main()
+```
 # Logbog for emnet
 ## Brainstorm 06-03-2026
 
@@ -287,8 +289,8 @@ Miro is a visual workspace for innovation where teams manage projects, design pr
 Billede 
 
 
-kode for i dag (23/3):
-
+## kode for i dag (23/3):
+```cpp
 #define SDA_PORT PORTD
 #define SDA_PIN 2
 #define SCL_PORT PORTD
@@ -374,8 +376,38 @@ void loop() {
 
   delay(1000);
 }
-
+```
 Udover ovenstående er vi nået langt. Gangen før var Sebastian fraværende, så vi brugte lang tid på at få downloadet de nødvendige programmer og udvidelser på Emilies computer. I dag har August og Emilie brugt tid på at tilslutte en lyd-sensor, rette i koden og forsøge at kalibre den, sådan at vi får værdierne i dB (pt giver den bare rå ACD data, som er en måling af elektriske impulser). Derudover har vi i fællesskab fået Excel til at fungere sådan, at vi kan se den opdatere live i stedet for at crashe programmet hver gang den starter op.
+
+## 08-04-2026
+
+Idag vil vi gerne have designet vores kasse. så det ser lidt bedrer ud end bare en arduino plade med en masse ledningerne der stikker op, mark har også sagt at vi skal have forberet en præsentation af vores projekt så det skal vi have gjort til på fredag.
+
+vi bruger autodesk fusion til at lave og designe vores kasse
+den nuværende design ide lavet i microsoft paint: 
+<img width="1157" height="664" alt="image" src="https://github.com/user-attachments/assets/b582a9d7-60bf-4e40-9d35-f84777808a2f" />
+
+#### resume af dagen:
+
+vi har fået lavet kassen, med huller til ledningerne og lommer til målerne på siden. det tog lang tid da målene af måleren skulle være ret præcise da vi gerne vil ha at den ligger indeni uden at rumstere alt for meget.
+
+derudover at vi også startet på præsentation, hvor vi har udtænkt at den skal indeholde: forside, disposition, hvad projektet handler om, hvordan vores virker, demostration at den virker, opsamling på vores data og projekt.
+vi er ikke nået særligt langt med det præcise indhold at de forskellige punkter. men vi vil gerne præsentere på klassen (der skulle ikke være tid til at alle kan præsentere), nu vi jo har lavet projektet og eneligt er kommer fint i mål:
+
+##### kassen:
+
+<img width="1113" height="512" alt="image" src="https://github.com/user-attachments/assets/0ba7226a-51e5-4d8f-9309-230a447d85ab" />
+
+##### kassen med forklaringer:
+
+<img width="1372" height="625" alt="image" src="https://github.com/user-attachments/assets/e512a018-f2e9-4bc1-9628-82b1e1e4229c" />
+
+
+## 09-04-2026
+
+#### dagen program: 
+
+vi skal have printet vores kasse, taget målinger af klassen så vi har noget data at præsentere, lavet præsentationen så vi er klar i morgentidlig.
 
 
 
