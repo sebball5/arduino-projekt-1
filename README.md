@@ -5,6 +5,11 @@ af August, Emilie og Sebastian
 # Problemformulering 
 I vores klasseværelse er der ofte tung luft, meget støj og en kvælende temperatur. Dette forringer vores læringsevne ret markant, da det er svært at koncentrere sig og holde fokus når omgivelserne er dårlige. Vi vil derfor gerne undersøge luftkvaliteten, lydniveauet, temperaturen og mængden af fugt ved hjælp af en Arduino. Vi vil gerne undersøge sammenhængen mellem de forskellige faktorer, om der er forskel i pauserne vs. timerne (og dermed om faktorerne påvirkes markant af ændringer i lokalet som fx. mængden af mennesket og om vinduet er åbent) og om vi eventuelt kommer over nogle grænseværdier, som vi derefter kan forbedre enten selv eller ved at få lavet markante ændringer i klasselokalet.
 
+# Powerpoint præsentation 
+
+https://tstaarhustech-my.sharepoint.com/:p:/g/personal/at25sesj_edu_aarhustech_dk/IQDQW1roxacjSZUCvhoZm9N9AdtN3fWhZ4f2LsHmY900V4c?e=reZSht
+skreven kort om vores præsentation mangler vi
+
 # Flowchart 
 Link til flowchart lavet i Miro ↓
 
@@ -409,5 +414,15 @@ vi er ikke nået særligt langt med det præcise indhold at de forskellige punkt
 
 vi skal have printet vores kasse, taget målinger af klassen så vi har noget data at præsentere, lavet præsentationen så vi er klar i morgentidlig.
 
+#### Resume af dagen
 
+Vi har sat kassen til at printe, så den er klar til i morgen tidlig. Derudover har vi foretaget en række målinger så vi har nogle grafer vi kan præsentere. Præsentationen er lavet i powerpoint, alle slides er lavet med stikord.
+
+## 10-04-2026
+
+#### Dagens program 
+
+i dag skal vi have præsenteret vores projekt med vores powerpoint, derudover skal vi også være færdig med alt andet. SIDSTE DAG
+
+#### Resume af dagen
 
